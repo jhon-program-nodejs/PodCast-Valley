@@ -1,8 +1,9 @@
 const Sequelize = require('sequelize')
-const connection = new Sequelize('podcastsValley','root', 'ja2213182019',{
+const connection = new Sequelize('podcastsValley','root', process.env.PASSWORD_MYSQL ,{
     host:'localhost',
     dialect:'mysql'
 })
+
 
 connection.sync({force:false})
 

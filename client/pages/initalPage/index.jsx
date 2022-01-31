@@ -3,17 +3,19 @@ import React, { useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import HeaderTitle from '../../src/Components/pageOne/Header/index'; 
 import MainPageInital from '../../src/Components/pageOne/MainPageInital/index';
-import Footer from '../../src/Components/pageOne/footer/index';
+
 
 
 // create a component
-const InitailPage = () => {
+const InitailPage = ({route,navigation}) => {
 
  return  (
         <View style={styles.container}>
           <HeaderTitle/>
-          <MainPageInital/>
-          <Footer/>
+          <MainPageInital
+          navigation={navigation}
+          route={route}
+          />
         </View>
       );
 };

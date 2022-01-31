@@ -6,8 +6,8 @@ const widthDimensions= Dimensions.get('window').width
 const styles = StyleSheet.create({
     containerMainTwo: {
         flex:1,
-        width:widthDimensions,
-        justifyContent: 'flex-start',
+        width:'100%',
+        justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#fff',
         borderWidth: .4,
@@ -15,19 +15,20 @@ const styles = StyleSheet.create({
     },
     containerMain: {
         width: '100%',
-        height:50,
+        flexDirection: 'column',
+        flexWrap:'wrap',
         justifyContent: 'center',
+        alignItems:'center',
         backgroundColor: '#8257e5',
-        borderWidth: .4,
+        borderWidth: .1,
         borderColor: '#fff',
-        borderRadius:50,
-        marginTop:2
+        marginTop:1
     },
     
     musicContainer: {
         width:widthDimensions,
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
+        flexDirection:'row',
+        justifyContent: 'space-between',
         alignItems: 'center',
     }
     });

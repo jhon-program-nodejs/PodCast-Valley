@@ -1,28 +1,28 @@
 import React, { useEffect } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import LottieView from 'lottie-react-native';
-import {useNavigation, CommonActions} from '@react-navigation/core'
+import { useNavigation, CommonActions } from '@react-navigation/core'
+import Header from '../src/Components/pageOne/Header/index';
 export default function App() {
-    
+
     const navigation = useNavigation()
 
-    useEffect(()=>{
-        setTimeout(()=>{
+    useEffect(() => {
+        setTimeout(() => {
             navigation.dispatch(CommonActions.reset({
-                index:0,
-                routes:[{name:'finishedLoading'}]
+                index: 0,
+                routes: [{ name: 'finishedLoading' }]
             }))
-        },5000)
-    },[])
+        }, 5000)
+    }, [])
 
     return (
         <View style={styles.animationContainer}>
             <View>
-
                 <LottieView
                     /* ref={animation => {
                         this.animation = animation;
-                      }} */
+                    }} */
                     style={{
                         width: 400,
                         height: 700,
@@ -35,12 +35,11 @@ export default function App() {
                 // Just click the one you like, place that file in the 'assets' folder to the left, and replace the above 'require' statement
                 />
             </View>
-                        <View style={styles.containerTitle}>
-            
-                            <Text style={styles.textTitle}>
-                                Podcast Valley
-                            </Text>
-                        </View>
+            <View style={styles.containerTitle}>
+
+                <Header />
+
+            </View>
         </View>
     );
 }
@@ -55,14 +54,15 @@ const styles = StyleSheet.create({
         height: '100%',
     },
     containerTitle: {
-        position:'absolute',
-        top:70
+        position: 'absolute',
+        width:400,
+        height:'100%',
     },
-    textTitle:{
-        color:'#fff',
-        fontSize:28,
-        fontFamily:'serif',
-        fontWeight:'bold'
+    textTitle: {
+        color: '#fff',
+        fontSize: 28,
+        fontFamily: 'serif',
+        fontWeight: 'bold'
     }
 
 });

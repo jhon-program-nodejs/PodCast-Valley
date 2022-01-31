@@ -1,16 +1,21 @@
 //import liraries
-import { useNavigation } from '@react-navigation/native';
-import React from 'react';
-import { View,StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet } from 'react-native';
 import ComponetsPageTwo from '../../src/Components/pageTwo/mainPage/index'
+import Axios from 'axios'
+
+
 
 // create a component
-const pageTwo = () => {
-    const navigation = useNavigation()
-
+const pageTwo = ({route,navigation}) => {
+    
+  
     return (
         <View style={styles.container}>
-            <ComponetsPageTwo/>
+            <ComponetsPageTwo
+            navigation={navigation}
+            route = {route}
+            />
         </View>
     );
 };

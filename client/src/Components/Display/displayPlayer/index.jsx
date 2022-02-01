@@ -6,8 +6,12 @@ import styles from './style';
 import { Audio } from 'expo-av';
 
 let sondMaster;
-// let response = []
+let playbackStatus;
 let counter = 0
+let counterStatus = 0
+let incrementer = 0
+let stopSetInterval;
+let songDurationInSeconds;
 
 // create a component
 const Footer = ({ route, navigation }) => {
@@ -15,26 +19,25 @@ const Footer = ({ route, navigation }) => {
     const [nameMusic, setNameMusic] = useState()
     const [status, setStatus] = useState('Tocando')
     const [soundMusic, setSoundMusic] = useState();
+    const [progress, setProgress] = useState('0%');
 
     useEffect(() => {
         playSound(uri)
         setNameMusic(name)
         counter = index
         return soundMusic
-        ? () => {
-            soundMusic.unloadAsync();
-        }
-        : undefined;
+            ? () => {
+                soundMusic.unloadAsync();
+            }
+            : undefined;
     }, [soundMusic])
-    
-    async function playSound(URI) {
 
+    async function playSound(URI) {
+        counterStatus = 0
         // console.log('Loading Sound');
         const { sound } = await Audio.Sound.createAsync(
             { uri: URI },
         );
-
-        sound.stopAsync()
 
         // response = [...res]
         sondMaster = sound
@@ -42,49 +45,154 @@ const Footer = ({ route, navigation }) => {
         setSoundMusic(soundMusic);
 
         await sound.playAsync();
+        // playbackStatus = await sound.getStatusAsync()
+        progressBar(playbackStatus)
+
     }
 
+    const progressBar = async (musicPlayed) => {
 
-    const PressPlaySongs = () => {
+        musicPlayed = await sondMaster.getStatusAsync()
 
-        status === "Pausado" ? sondMaster.playAsync() : null
+        let { durationMillis, isPlaying } = musicPlayed
+
+        console.log(durationMillis);
+
+        songDurationInSeconds = (durationMillis + 12000 )/ 1000
+
+        incrementer = 100 / songDurationInSeconds
+
+        if (isPlaying) {
+
+            setProgress(`${counterStatus}%`)
+
+            stopSetInterval = setInterval(() => {
+
+                if (counterStatus <= 100) {
+                    setProgress(`${counterStatus += incrementer}%`)
+                    return
+                }
+                setStatus('Pausado')
+                advanceMusic()
+            }, 1000)
+        }
+    }
+
+    const press = async (e) => {
+
+        playbackStatus = await sondMaster.getStatusAsync()
+
+        let { durationMillis } = playbackStatus
+
+        // console.log(playbackStatus);
+
+        // console.log(durationMillis);
+
+        let totalLengthOfProgressBar = 290 / 100
+
+        console.log("totalLengthOfProgressBar", totalLengthOfProgressBar)
+
+        let barProgressPercentage = e.locationX / totalLengthOfProgressBar
+
+        console.log('barProgressPercentage:', barProgressPercentage)
+
+        let modifyAudioFloor = (durationMillis / 100) * barProgressPercentage
+        
+        console.log('modifyAudioFloor:', modifyAudioFloor)
+
+        clearInterval(stopSetInterval)
+
+        counterStatus = barProgressPercentage
+
+        await sondMaster.setPositionAsync(modifyAudioFloor)
+
+        // console.log(modifyAudioFloor, barProgressPercentage);
+
+        setProgress(`${counterStatus}%`)
+
+        stopSetInterval = setInterval(() => {
+
+            if (counterStatus <= 100) {
+                setProgress(`${counterStatus += incrementer}%`)
+                return
+            }
+            setStatus('Pausado')
+
+        }, 1000)
+
+    }
+
+    const PressPlaySongs = async () => {
+
+
+         await sondMaster.playAsync()
+
         setStatus('Tocando')
 
     }
 
-    const PressPauseSongs = () => {
-        status === "Tocando" ? sondMaster.pauseAsync() : null
+    const PressPauseSongs = async () => {
+
+        await sondMaster.pauseAsync()
+
         setStatus('Pausado')
 
+        clearInterval(stopSetInterval)
     }
 
 
 
-    const backMusic = async (e) => {
+    const backMusic = async () => {
+        
+
         if (counter > 0) {
-            sondMaster.stopAsync()
+
+            await sondMaster.stopAsync()
+
             counter--
+
             const findElement = res.find(element => element.index == counter)
-            console.log(counter);
+
+            // console.log(counter);
+
             playSound(res[counter].uri)
+
             setNameMusic(findElement.nameFormated)
+
+            // setStatus('Tocando')
+
             return
+
         }
+
         counter = 0
     }
-    const advanceMusic = e => {
+    const advanceMusic = async () => {
+        
+
         if (counter < res.length - 1) {
-            sondMaster.stopAsync()
+
+            await sondMaster.stopAsync()
+
             counter++
+
             const findElement = res.find(element => element.index == counter)
-            console.log(counter);
+
+            // console.log(counter);
+
             setNameMusic(findElement.nameFormated)
+
+            setStatus('Tocando')
+
             playSound(res[counter].uri)
+
+            // setStatus('Tocando')
+
             return
+
         }
         counter = res.length - 1
     }
-
     return (
         <View style={styles.container}>
 
@@ -111,7 +219,31 @@ const Footer = ({ route, navigation }) => {
 
 
             </View>
+            <View style={{
+                width: 290,
+                height: 15,
+                borderWidth: 0.4,
+                borderColor:'#fff',
+                borderRadius: 50,
+                marginTop: 6,
+                marginBottom: 6,
+                marginRight: 35
+            }}
 
+                onTouchStart={e => press(e.nativeEvent)}
+            >
+                <View
+                    style={{
+                        width: progress,
+                        height: 15,
+                        borderWidth: 0.4,
+                        borderColor:'#fff',
+                        backgroundColor: '#ff532c',
+                        borderRadius: 50
+                    }}
+                >
+                </View>
+            </View>
 
             <View style={styles.controlerAudio}>
                 <View>
@@ -119,7 +251,7 @@ const Footer = ({ route, navigation }) => {
                         name="play-back"
                         size={38}
                         color="white"
-                        onPress={(e) => backMusic(e.stopPropagation())}
+                        onPress={() => backMusic()}
                     />
                 </View>
 
@@ -155,7 +287,7 @@ const Footer = ({ route, navigation }) => {
                         name="play-forward"
                         size={38}
                         color="white"
-                        onPress={(e) => advanceMusic(e.stopPropagation())}
+                        onPress={() => advanceMusic()}
                     />
                 </View>
 

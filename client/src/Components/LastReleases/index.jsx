@@ -89,9 +89,9 @@ const MainPageInital = ({ route, }) => {
                                         style={{ fontSize: 18, color: '#d2802e', backgroundColor: '#fff', fontWeight: 'bold', padding: 12, borderRadius: 50 }}
                                     >{music.orderFormated}</Text>
                                 </View>
-                                <View style={{ margin: 6, backgroundColor: '#fff', padding: 15, borderRadius: 20 }}>
+                                <View style={{ margin: 6, backgroundColor: '#fff', padding: 15, borderRadius: 20, width:200 }}>
                                     <Text
-                                        style={{ marginLeft: 10, fontSize: 20, color: '#000' }}
+                                        style={{ marginLeft: 10, fontSize: 20, color: '#000', textAlign:'center' }}
                                         onPress={() => {
                                             navigation.navigate('PageDisplayMusic', {
                                                 name: music.nameFormated,

@@ -24,6 +24,7 @@ export default function App() {
                         this.animation = animation;
                     }} */
                     style={{
+                        marginTop:60,
                         width: 400,
                         height: 700,
                         backgroundColor: '#8257e5',

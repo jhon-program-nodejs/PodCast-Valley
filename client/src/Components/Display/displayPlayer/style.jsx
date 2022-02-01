@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     container: {
         width:'100%',
         height:'20%',
-        justifyContent: 'space-evenly',
+        justifyContent: 'center',
         alignItems: 'flex-end',     
         backgroundColor:'#8257e5',   
         borderWidth:1,

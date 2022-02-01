@@ -17,13 +17,15 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "1e5cb38d-5d66-4b7d-a69a-6a5adb73e130"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.john_programmer.PodCastValley"
     },
     "web": {
       "favicon": "./assets/favicon.png"

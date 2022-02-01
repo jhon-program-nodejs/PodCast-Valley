@@ -10,8 +10,8 @@ let playbackStatus;
 let counter = 0
 let counterStatus = 0
 let incrementer = 0
-let stopSetInterval;
-let songDurationInSeconds;
+let stopSetIntervalOne;
+let stopSetIntervalTwo;
 
 // create a component
 const Footer = ({ route, navigation }) => {
@@ -19,7 +19,7 @@ const Footer = ({ route, navigation }) => {
     const [nameMusic, setNameMusic] = useState()
     const [status, setStatus] = useState('Tocando')
     const [soundMusic, setSoundMusic] = useState();
-    const [progress, setProgress] = useState('0%');
+    const [progress, setProgress] = useState(0);
 
     useEffect(() => {
         playSound(uri)
@@ -125,7 +125,7 @@ const Footer = ({ route, navigation }) => {
     const PressPlaySongs = async () => {
 
 
-         await sondMaster.playAsync()
+        await sondMaster.playAsync()
 
         setStatus('Tocando')
 
@@ -137,13 +137,16 @@ const Footer = ({ route, navigation }) => {
 
         setStatus('Pausado')
 
-        clearInterval(stopSetInterval)
+        clearInterval(stopSetIntervalOne)
+        clearInterval(stopSetIntervalTwo)
     }
 
 
 
     const backMusic = async () => {
-        
+
+        counterStatus = 0
+
 
         if (counter > 0) {
 
@@ -153,13 +156,11 @@ const Footer = ({ route, navigation }) => {
 
             const findElement = res.find(element => element.index == counter)
 
-            // console.log(counter);
 
             playSound(res[counter].uri)
 
             setNameMusic(findElement.nameFormated)
 
-            // setStatus('Tocando')
 
             return
 
@@ -168,7 +169,8 @@ const Footer = ({ route, navigation }) => {
         counter = 0
     }
     const advanceMusic = async () => {
-        
+
+        counterStatus = 0
 
         if (counter < res.length - 1) {
 
@@ -178,7 +180,6 @@ const Footer = ({ route, navigation }) => {
 
             const findElement = res.find(element => element.index == counter)
 
-            // console.log(counter);
 
             setNameMusic(findElement.nameFormated)
 
@@ -186,7 +187,6 @@ const Footer = ({ route, navigation }) => {
 
             playSound(res[counter].uri)
 
-            // setStatus('Tocando')
 
             return
 
@@ -223,7 +223,7 @@ const Footer = ({ route, navigation }) => {
                 width: 290,
                 height: 15,
                 borderWidth: 0.4,
-                borderColor:'#fff',
+                borderColor: '#fff',
                 borderRadius: 50,
                 marginTop: 6,
                 marginBottom: 6,
@@ -237,7 +237,7 @@ const Footer = ({ route, navigation }) => {
                         width: progress,
                         height: 15,
                         borderWidth: 0.4,
-                        borderColor:'#fff',
+                        borderColor: '#fff',
                         backgroundColor: '#ff532c',
                         borderRadius: 50
                     }}
